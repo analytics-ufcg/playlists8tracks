@@ -1,0 +1,6 @@
+77;David Bowie;Golden Years;96
+3;Jota Quest;Amor maior;5
+81;Don McLean;Crying;44
+64;Beatles;I Want To Hold Your Hand;2
+96;Joan Osborne;One Of Us;13
+199899;Red Hot Chili Peppers;Californication;20000
