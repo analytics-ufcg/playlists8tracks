@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-import com.echonest.api.v4.Artist;
 import com.echonest.api.v4.ArtistParams;
 import com.echonest.api.v4.EchoNestAPI;
 import com.echonest.api.v4.EchoNestException;
@@ -53,7 +52,7 @@ public class CriaBaseSongs {
 
 	}
 
-	private Song identificaCancao(List<Song> songs, String artist) {
+	private static Song identificaCancao(List<Song> songs, String artist) {
 		for (Song s : songs) {
 			if (s.getArtistName().toLowerCase()
 					.contains(artist.toLowerCase().trim())) {
@@ -69,14 +68,10 @@ public class CriaBaseSongs {
 		Params p = new Params();
 
 		ap.addName(artist);
-		List<Artist> artists;
 		List<Song> songs;
 		String resultado = "";
-		int indiceArtista, indiceTitulo;
 		try {
 			p.add("artist", artist);
-			// System.out.println("id de "+artist+
-			// " eh "+artists.get(indiceArtista).getID());
 			p.add("title", title);
 			p.add("results", 50);
 			try {
@@ -87,22 +82,10 @@ public class CriaBaseSongs {
 				getProximaAPIKey();
 				songs = en.searchSongs(p);
 			}
-
+			
 			Song song = identificaCancao(songs, artist);
 
-			// artists = en.searchArtists(ap);
-			// indiceArtista = artistaEncontrado(artists, artist);
-			// if (s != null) {
-			//
-			//
-			// //songs = artists.get(indiceArtista).getSongs();
-			// } else {
-			// return "\n";
-			// }
-			// indiceTitulo = musicaEncontrada(songs, title);
 			if (song != null) {
-				// Song song = songs.get(indiceTitulo);
-				// ANO;ARTISTA;ARTISTAID;TITULO;PAIS;BPM;DANCABILIDADE;ENERGIA;SONORIDADE;DURATION;TIMESIGNATURE;ARQUIVO_TIMBRE
 				String arquivoTimbre = PASTA_TIMBRE + songID + ".txt";;
 				resultado = String.format(
 						"%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%d\t%s",
@@ -143,9 +126,14 @@ public class CriaBaseSongs {
 		return result.substring(0, result.length() - 1);
 	}
 
-	private String getTimbres(Song song) {
+	private static String getTimbres(Song song) {
 		String resultado = "";
 		try {
+			
+			if (song.getAnalysisURL() == null){
+				return resultado;
+			}
+			
 			List<Segment> segmentos = song.getAnalysis().getSegments();
 			for (Segment s : segmentos) {
 				resultado += transformaArrayString(s.getTimbre()) + "\n";
@@ -189,6 +177,21 @@ public class CriaBaseSongs {
 				}
 
 				String outputLine = "";
+				
+				boolean coletou = false;
+				
+				while(!coletou){
+					try {
+						outputLine = sse.searchSongByTitleAndArtist(
+								splittedLine[2], splittedLine[1], splittedLine[3]);
+						coletou = true;
+					} catch (Exception e) {
+						e.printStackTrace();
+						sse.getProximaAPIKey();
+					}
+					
+				}
+				
 				try {
 					outputLine = sse.searchSongByTitleAndArtist(
 							splittedLine[2], splittedLine[1], splittedLine[3]);
