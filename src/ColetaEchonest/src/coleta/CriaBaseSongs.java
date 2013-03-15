@@ -1,16 +1,10 @@
 package coleta;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +18,7 @@ import com.echonest.api.v4.Song;
 
 public class CriaBaseSongs {
 	private EchoNestAPI en, en1, en2, en3;
-	final static Charset ENCODING = StandardCharsets.ISO_8859_1;
+//	final static Charset ENCODING = StandardCharsets.ISO_8859_1;
 	final static String PASTA_TIMBRE = "timbres/";
 	int indexAtual;
 
@@ -34,7 +28,7 @@ public class CriaBaseSongs {
 		en1 = new EchoNestAPI(APIKeys[0]);
 		en2 = new EchoNestAPI(APIKeys[1]);
 		en3 = new EchoNestAPI(APIKeys[2]);
-		en = en1; // começa com a primeira api key
+		en = en1; 
 		indexAtual = 0;
 		en1.setTraceSends(false);
 		en1.setTraceRecvs(false);
@@ -89,7 +83,7 @@ public class CriaBaseSongs {
 				songs = en.searchSongs(p);
 			} catch (Exception e) {
 				System.out.println("QUEBROU SONGS");
-				System.out.println("indiceatual é " + indexAtual);
+				System.out.println("indice atual eh " + indexAtual);
 				getProximaAPIKey();
 				songs = en.searchSongs(p);
 			}
@@ -111,7 +105,7 @@ public class CriaBaseSongs {
 				// ANO;ARTISTA;ARTISTAID;TITULO;PAIS;BPM;DANCABILIDADE;ENERGIA;SONORIDADE;DURATION;TIMESIGNATURE;ARQUIVO_TIMBRE
 				String arquivoTimbre = PASTA_TIMBRE + songID + ".txt";;
 				resultado = String.format(
-						"%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%d%s\n",
+						"%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%d\t%s",
 						song.getSongHotttnesss(),
 						song.getTempo(), song.getDanceability(),
 						song.getEnergy(), song.getLoudness(),
@@ -130,7 +124,7 @@ public class CriaBaseSongs {
 				}
 
 			} else {
-				return "\n";
+				return "";
 			}
 
 		} catch (EchoNestException e) {
@@ -141,35 +135,7 @@ public class CriaBaseSongs {
 
 	}
 
-	// private int artistaEncontrado(List<Artist> artists, String
-	// artistaDesejado) throws EchoNestException {
-	// for (int i = 0; i< artists.size(); i++){
-	// System.out.println(artists.get(i).getName());
-	// if
-	// (artists.get(i).getName().toLowerCase().contains(artistaDesejado.trim().toLowerCase())){
-	// System.out.println("deu certo pra "+artistaDesejado);
-	// return i;
-	// }
-	// }
-	// System.out.println("foi procurar "+artistaDesejado+ " mas deu errado");
-	// return -1;
-	// }
-	//
-	// private int musicaEncontrada(List<Song> songs, String musicaDesejada)
-	// throws EchoNestException {
-	// for (int i = 0; i< songs.size(); i++){
-	// if
-	// (songs.get(i).getTitle().toLowerCase().contains(musicaDesejada.trim().toLowerCase())){
-	// System.out.println(songs.get(i).getTitle().toLowerCase());
-	// return i;
-	// }
-	// }
-	// System.out.println("foi procurar "+musicaDesejada+
-	// " mas deu errado em "+songs.size()+ " musicas");
-	// return -1;
-	// }
-
-	private String transformaArrayString(double[] d) {
+	private static String transformaArrayString(double[] d) {
 		String result = "";
 		for (int i = 0; i < d.length; i++) {
 			result += d[i] + ",";
@@ -210,6 +176,7 @@ public class CriaBaseSongs {
 		int currentLine = 0;
 		while(currentLine < lineNumber){
 			input.nextLine();
+			currentLine++;
 		}
 		
 		try {
@@ -239,18 +206,26 @@ public class CriaBaseSongs {
 				} else {
 					FileWriter writer = new FileWriter(
 							new File(outputFileName), true);
-					writer.write(newLine + "\t" + outputLine);
+					StringBuilder sb = new StringBuilder();
+					sb.append(splittedLine[0] + "\t");
+					sb.append(splittedLine[1] + "\t");
+					sb.append(splittedLine[2] + "\t");
+					sb.append(splittedLine[3] + "\t");
+					sb.append(outputLine + "\t");
+					sb.append(splittedLine[4] + "\n");
+
+					writer.write(sb.toString());
 					writer.close();
 				}
 
 				FileWriter writer = new FileWriter(new File("contagem.txt"),
 						false);
-				writer.write(++currentLine);
+				writer.write("" + (++currentLine));
 				writer.close();
 			}
 		} catch (Exception e) {
 			input.close();
-		}		
+		}
 	}
 
 }
