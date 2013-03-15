@@ -1,0 +1,4 @@
+java -jar LastFmRequest.jar 5/xae 5/saida5.txt 5/contagem.txt
+
+echo {1..11} | xargs -P 11 -n 1 sh qq.sh
+
