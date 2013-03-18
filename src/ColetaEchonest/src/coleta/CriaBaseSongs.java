@@ -161,13 +161,17 @@ public class CriaBaseSongs {
 			lineNumber = new Scanner(new File("contagem.txt")).nextInt();
 		}
 		
-		int currentLine = 0;
-		while(currentLine < lineNumber){
-			input.nextLine();
-			currentLine++;
-		}
-		
 		try {
+			int currentLine = 0;
+			while(currentLine < lineNumber){
+				if(input.hasNextLine()){
+					input.nextLine();
+					currentLine++;
+				}else{
+					throw new Exception("Error reading input file!");
+				}
+			}
+		
 			while (input.hasNextLine()) {
 				String newLine = input.nextLine();
 				String[] splittedLine = newLine.split("\t");
