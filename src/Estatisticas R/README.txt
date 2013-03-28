@@ -9,3 +9,7 @@ por playlists.
 
 -O script "calcula_correlacao_atributos_x_popularidade.R" calcula a correlação de todos os atributos obtidos com a popularidade
 (atributo x popularidade) criando um arquivo de saida com esses dados e também vários gráficos plot xy.
+
+
+-O script "calcula_regressao.R" realiza uma regressão logistica dos dois atributos que apresentaram melhor correlação com a popularidade. Também 
+é realizado treinamento e teste do modelo com erros apresentados no final.

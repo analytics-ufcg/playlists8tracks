@@ -9,11 +9,35 @@ data2 = read.csv("plays-statistics.txt",sep="\t")
 
 data = cbind(data1,data2)
 
+data3 = read.csv("tags-statistics.txt",sep=",")
+data3 = data3[order(data3$id_play),]
+
+data = data[data$idplay %in% data3$id_play, ]
+
+data = cbind(data,data3)
+
+
 rm(data1)
 rm(data2)
+rm(data3)
 
+#selecionada os 10% mais e menos populares
+
+quantile(data$pop, c(.10,.90))
+
+data = subset(data, data$pop <= 0.09090909 | data$pop >= 0.54545455)
 
 write.table(data, output, sep="\t", quote=F)
+
+data = read.csv("estatisticas-das-playlists.txt",sep="\t")
+
+
+#retira atributos desnecessarios
+data = data[ , -which(names(data) %in% c("idplay","id_play","id_play.1","user_id","id_user","popularity"))]
+
+#retira plays com NAs
+
+data = na.omit(data)
 
 
 #monta as imagens dos plots pop x atributo
@@ -127,4 +151,5 @@ correlacao = as.data.frame(cbind(vetor.kendall,vetor.pearson,vetor.spearman))
 
 
 write.table(correlacao, "correlacao dos atributos x popularidade.txt", sep="\t", quote=F)
+
 
