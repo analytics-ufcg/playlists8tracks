@@ -1,6 +1,6 @@
 /*cria a tabela com as mixes/(playlists) filtradas*/
 create table mixes_filtro(select id as id_play, name as nome_play, tag_list_cache as tag_list from mixes where(
-(tag_list_cache like '%indie%' or tag_list_cache like '%reggae%') and plays_count > 20
+tag_list_cache like '%indie%' and plays_count > 20
 and year(updated_at) >= 2010));
 
 /*cria a tabela de tracks apenas com as colunas de interesse, que posteriormente
