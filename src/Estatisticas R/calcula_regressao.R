@@ -383,9 +383,10 @@ tabela.regressao = read.csv("regressao_estatistica_quatro_atributos.txt",sep="\t
 #correlação 
 
 correlacao.spearman = cor(x=data$soma.hottness, y=data$quant.musicas,method="spearman")
+#0.8857776
 
 correlacao.kendall = cor(x=data$soma.hottness, y=data$quant.musicas,method="kendall")
-
+#0.7440508
 
 #gera imagem do intervalo
 png("IC_Mean_Acertos_Erros.png")
